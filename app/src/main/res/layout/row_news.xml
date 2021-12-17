@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/dist_five"
+    android:layout_marginVertical="@dimen/dist_five">
+
+    <ImageView
+        android:id="@+id/imgNews"
+        android:layout_width="@dimen/dist_130"
+        android:layout_height="@dimen/dist_130"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txtTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dist_five"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="basas"
+        android:textSize="@dimen/font_18"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imgNews"
+        app:layout_constraintTop_toTopOf="@+id/imgNews" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txtDesc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/dist_five"
+        android:ellipsize="end"
+        android:maxLines="3"
+        app:layout_constraintEnd_toEndOf="@+id/txtTitle"
+        app:layout_constraintStart_toStartOf="@+id/txtTitle"
+        app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txtSource"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dist_five"
+        android:background="@drawable/shape_box"
+        android:padding="@dimen/dist_five"
+        android:text="@string/app_name"
+        android:textSize="@dimen/font_14"
+        app:layout_constraintBottom_toBottomOf="@+id/imgNews"
+        app:layout_constraintStart_toStartOf="@+id/txtDesc" />
+
+    <ImageView
+        android:id="@+id/imgBookMark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dist_five"
+        android:background="@drawable/shape_circle"
+        android:padding="@dimen/dist_five"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_bookmark_holo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txtSource" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="@dimen/dist_twenty"
+        android:background="@color/gray1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgBookMark" />
+</androidx.constraintlayout.widget.ConstraintLayout>

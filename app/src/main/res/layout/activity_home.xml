@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.HomeActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:elevation="0dp"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent"
+            app:popupTheme="@style/ToolBarTheme.ToolBarStyle"
+            app:titleTextColor="@color/black"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appbar"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cslLoader"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@color/gray1"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ProgressBar
+                    android:id="@+id/progressDialog"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:indeterminateTint="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txtTopNews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dist_five"
+                android:text="@string/topNews"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_18"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/lineTopNews"
+                android:layout_width="@dimen/dist_twentyfive"
+                android:layout_height="1dp"
+                android:layout_marginVertical="@dimen/dist_five"
+                android:background="@color/teal_700"
+                app:layout_constraintStart_toStartOf="@+id/txtTopNews"
+                app:layout_constraintTop_toBottomOf="@+id/txtTopNews" />
+
+            <ImageView
+                android:id="@+id/imgTopNews"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dist_200"
+                android:layout_marginVertical="@dimen/dist_ten"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lineTopNews" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txtTopHeadLine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dist_five"
+                android:layout_marginVertical="@dimen/dist_ten"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imgTopNews" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/cslTopNews"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtTopHeadLine">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txtTopDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/dist_five"
+                    android:layout_marginVertical="@dimen/dist_ten"
+                    android:ellipsize="end"
+                    android:maxLines="3"
+                    android:textSize="@dimen/font_14"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txtSource"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/dist_five"
+                    android:background="@drawable/shape_box"
+                    android:padding="@dimen/dist_five"
+                    android:text="@string/app_name"
+                    android:textSize="@dimen/font_14"
+                    app:layout_constraintStart_toStartOf="@+id/txtTopDesc"
+                    app:layout_constraintTop_toBottomOf="@+id/txtTopDesc" />
+
+                <ImageView
+                    android:id="@+id/imgBookMark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/dist_five"
+                    android:background="@drawable/shape_circle"
+                    android:padding="@dimen/dist_five"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_bookmark_holo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/txtSource" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txtPopularNews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dist_five"
+                android:layout_marginVertical="@dimen/dist_thirty"
+                android:text="@string/PopularNews"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_18"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cslTopNews" />
+
+            <View
+                android:id="@+id/linePopularNews"
+                android:layout_width="@dimen/dist_twentyfive"
+                android:layout_height="1dp"
+                android:layout_marginVertical="@dimen/dist_five"
+                android:background="@color/teal_700"
+                app:layout_constraintStart_toStartOf="@+id/txtPopularNews"
+                app:layout_constraintTop_toBottomOf="@+id/txtPopularNews" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/dist_ten"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linePopularNews" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

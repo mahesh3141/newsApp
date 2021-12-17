@@ -1,0 +1,10 @@
+
+#1, ApiService class under the network package is responsible for calling the api
+#2, Under the AppConstants class there is Domain & apiKey
+#3, Detail activity load the data from the home activity and there we display the first 2 record from
+    the news array which is passed from the home activity
+#4, Local database file and DAO files are under the room package
+#5, Test case for the Database class are written
+#6, NewsDBTest is under the androidTest which is a test case for sorting and accessing the data on
+    room db
+#7, Bookmark activity is showing the records from the db

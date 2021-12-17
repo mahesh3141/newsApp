@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- action button for search -->
+    <item android:title="@string/bookmarkNews"
+        android:id="@+id/menu_bookmark"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom|collapseActionView"
+        android:icon="@drawable/ic_bookmark_holo"/>
+
+    <!-- action button for refresh -->
+    <item android:title="@string/search"
+        android:id="@+id/menu_search"
+        android:orderInCategory="100"
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView"
+        android:icon="@drawable/ic_search"/>
+
+</menu>
