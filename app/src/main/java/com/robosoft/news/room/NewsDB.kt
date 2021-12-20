@@ -2,6 +2,7 @@ package com.robosoft.news.room
 
 import android.content.Context
 import androidx.room.*
+import com.robosoft.news.di.Component
 import com.robosoft.news.room.interfaces.NewsDAO
 import com.robosoft.news.room.interfaces.SearchDAO
 

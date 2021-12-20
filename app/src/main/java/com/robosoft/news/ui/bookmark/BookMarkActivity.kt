@@ -62,18 +62,20 @@ class BookMarkActivity : AppCompatActivity(),RemoveBookMark {
     }
 
     private fun loadBookMarks() {
-        viewModel.newDataSet?.observe(this,{data->
-            println("***==> "+data?.size)
-            bookmarkList = data as ArrayList<NewsTable>?
-           // displayBookmark()
-            loadPage(0)
-            initScrollListener(bookmarkList)
-        })
-        viewModel.getAllBookmarks(this)
+        viewModel.apply {
+            newDataSet?.observe(this@BookMarkActivity,{data->
+                println("***==> "+data?.size)
+                bookmarkList = data as ArrayList<NewsTable>?
+                // displayBookmark()
+                loadPage(0)
+                initScrollListener()
+            })
+          getAllBookmarks(this@BookMarkActivity)
+        }
 
     }
 
-    private fun initScrollListener(bookmarkList: java.util.ArrayList<NewsTable>?) {
+    private fun initScrollListener() {
         binding?.recycler?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -86,10 +88,7 @@ class BookMarkActivity : AppCompatActivity(),RemoveBookMark {
                     ) {
                         loadPage((recyclerView.adapter?.itemCount ?: 0))
                     }
-                } else {
-                    println("**** xxx ")
                 }
-
             }
         })
     }

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.robosoft.news.applications.NewsApp
 import com.robosoft.news.common.AppConstants
+import com.robosoft.news.di.Component
 import com.robosoft.news.network.ApiService
 import com.robosoft.news.room.NewsDB
 import com.robosoft.news.room.NewsTable
@@ -22,7 +23,7 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     var database:NewsDB?=null
     var newTable:LiveData<NewsTable>?=null
     var searchDataSet = MutableLiveData<List<SearchTable>>()
-
+    private var component = Component()
 
     companion object{
         fun initializeDB(context: Context) : NewsDB? {

@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.robosoft.news.R
 import com.robosoft.news.applications.GlideApp
 import com.robosoft.news.applications.NewsApp
-import com.robosoft.news.common.AppConstants
 import com.robosoft.news.interfaces.AddBookMark
 import com.robosoft.news.ui.home.models.Article
 import kotlinx.android.synthetic.main.row_news.view.*
@@ -25,7 +24,10 @@ class HomeAdapter(private val context: Context,
     private val EMPTY = 1
     private val LISTDATA = 2
 
-    fun updateData(arrayList:ArrayList<Article>){
+    fun updateData(arrayList: ArrayList<Article>, isRefresh: Boolean){
+        if(isRefresh){
+            dataList?.clear()
+        }
         dataList?.addAll(arrayList)
         notifyDataSetChanged()
     }

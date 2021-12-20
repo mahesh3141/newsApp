@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
+import com.robosoft.news.di.diModule
+import com.robosoft.news.di.interfaceModule
+import org.koin.core.context.startKoin
 
 class NewsApp : Application(), Application.ActivityLifecycleCallbacks  {
     companion object {
@@ -15,6 +18,10 @@ class NewsApp : Application(), Application.ActivityLifecycleCallbacks  {
     override fun onCreate() {
         super.onCreate()
         ctx = this
+        startKoin {
+            modules(diModule)
+            modules(interfaceModule)
+        }
     }
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
