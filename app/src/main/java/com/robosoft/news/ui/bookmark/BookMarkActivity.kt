@@ -26,17 +26,33 @@ import com.robosoft.news.interfaces.RemoveBookMark
 import com.robosoft.news.room.NewsTable
 import com.robosoft.news.ui.bookmark.adapters.BookmarkAdapter
 
-class BookMarkActivity : AppCompatActivity(),RemoveBookMark {
-    var binding:ActivityBookMarkBinding?=null
+class BookMarkActivity : AppCompatActivity(), RemoveBookMark {
+    var binding: ActivityBookMarkBinding? = null
     val mainRepository = BookMarkRepository()
-    val viewModel:BookMarkViewModel by viewModels{
+    val viewModel: BookMarkViewModel by viewModels {
         BookMarkFactory(mainRepository)
     }
-    var bookmarkList: ArrayList<NewsTable>?=null
-    var adapter : BookmarkAdapter?=null
-    var cursorAdapter : SimpleCursorAdapter?=null
+    var bookmarkList: ArrayList<NewsTable>? = null
+    var adapter: BookmarkAdapter? = null
+    var cursorAdapter: SimpleCursorAdapter? = null
     val pageLimit: Int = 5
     var isLoading = false
+    val scrollListener = object : RecyclerView.OnScrollListener() {
+
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
+            if (!isLoading) {
+                if (linearLayoutManager != null && (totalCount) > pageLimit
+                    && linearLayoutManager.findLastCompletelyVisibleItemPosition() >=
+                    (recyclerView.adapter?.itemCount ?: 0) - (pageLimit * 0.5)
+                ) {
+                    loadPage((recyclerView.adapter?.itemCount ?: 0))
+                }
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBookMarkBinding.inflate(layoutInflater)
@@ -63,60 +79,48 @@ class BookMarkActivity : AppCompatActivity(),RemoveBookMark {
 
     private fun loadBookMarks() {
         viewModel.apply {
-            newDataSet?.observe(this@BookMarkActivity,{data->
-                println("***==> "+data?.size)
+            newDataSet?.observe(this@BookMarkActivity, { data ->
+                println("***==> " + data?.size)
                 bookmarkList = data as ArrayList<NewsTable>?
                 // displayBookmark()
                 loadPage(0)
                 initScrollListener()
             })
-          getAllBookmarks(this@BookMarkActivity)
+            getAllBookmarks(this@BookMarkActivity)
         }
 
     }
 
     private fun initScrollListener() {
-        binding?.recycler?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
-                if (!isLoading) {
-                    if (linearLayoutManager != null && (recyclerView.adapter?.itemCount
-                            ?: 0) >= pageLimit && linearLayoutManager.findLastCompletelyVisibleItemPosition() >=
-                        (recyclerView.adapter?.itemCount ?: 0) - (pageLimit * 0.5)
-                    ) {
-                        loadPage((recyclerView.adapter?.itemCount ?: 0))
-                    }
-                }
-            }
-        })
+        binding?.recycler?.addOnScrollListener(scrollListener)
     }
 
     private fun loadPage(startPos: Int) {
-        if(!bookmarkList.isNullOrEmpty()){
+        if (!bookmarkList.isNullOrEmpty()) {
             val data = bookmarkList?.subList(
                 startPos,
-                if((bookmarkList?.size?:0-1)>=startPos+pageLimit) startPos + pageLimit else (bookmarkList?.size?:0-1)
+                if ((bookmarkList?.size
+                        ?: 0 - 1) >= startPos + pageLimit
+                ) startPos + pageLimit else (bookmarkList?.size ?: 0 - 1)
             )
             loadMore(data)
         }
     }
+
     var totalCount = -1
     private fun loadMore(arrayList: MutableList<NewsTable>?) {
-        if(totalCount==-1){
-            totalCount = arrayList?.size?:0
+        if (totalCount == -1) {
+            totalCount = arrayList?.size ?: 0
         }
-        if(adapter==null){
+        if (adapter == null) {
             displayBookmark(ArrayList(arrayList))
-        }else{
+        } else {
             arrayList?.let { adapter?.updateBookmark(ArrayList(it)) }
         }
     }
 
     private fun displayBookmark(arrayList: ArrayList<NewsTable>?) {
-        adapter = BookmarkAdapter(this, arrayList,this){
-
+        adapter = BookmarkAdapter(this, arrayList, this) {
         }
         binding?.recycler?.adapter = adapter
         adapter?.notifyDataSetChanged()
@@ -129,17 +133,17 @@ class BookMarkActivity : AppCompatActivity(),RemoveBookMark {
         val search: SearchView = menu.findItem(R.id.menu_search)?.actionView as SearchView
         search.setSearchableInfo(manager.getSearchableInfo(componentName))
         search.queryHint = getString(R.string.search)
-//        search.findViewById<AutoCompleteTextView>(R.id.search_src_text).threshold = 1
 
         val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
         val to = intArrayOf(R.id.item_label)
-        cursorAdapter = SimpleCursorAdapter(this
-            , R.layout.search_item, null, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER)
+        cursorAdapter = SimpleCursorAdapter(
+            this, R.layout.search_item, null, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER
+        )
 
         search.suggestionsAdapter = cursorAdapter
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(value: String?): Boolean {
-              //  callTopHeadLine(value?:"")
+                //  callTopHeadLine(value?:"")
                 viewModel.addSearch(search.context, value)
                 hideKeyboard(search)
                 return true
@@ -152,7 +156,7 @@ class BookMarkActivity : AppCompatActivity(),RemoveBookMark {
 
         })
 
-        search.setOnSuggestionListener(object : SearchView.OnSuggestionListener{
+        search.setOnSuggestionListener(object : SearchView.OnSuggestionListener {
             override fun onSuggestionSelect(position: Int): Boolean {
                 return false
             }
@@ -161,7 +165,8 @@ class BookMarkActivity : AppCompatActivity(),RemoveBookMark {
             override fun onSuggestionClick(position: Int): Boolean {
                 hideKeyboard(search)
                 val cursor = search.suggestionsAdapter.getItem(position) as Cursor
-                val selection = cursor.getString(cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1))
+                val selection =
+                    cursor.getString(cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1))
                 search.setQuery(selection, false)
                 return true
             }
@@ -169,29 +174,31 @@ class BookMarkActivity : AppCompatActivity(),RemoveBookMark {
         })
         return super.onCreateOptionsMenu(menu)
     }
+
     private fun loadSearch(query: String?) {
         val cursor = MatrixCursor(arrayOf(BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1))
-        query?.let { queryText->
+        query?.let { queryText ->
             if (queryText.length > 1) {
-                viewModel.getAllSearch(this)
-                viewModel.searchDataSet.observe(this, { dataSet ->
-                    println("*** size "+dataSet.size)
-                    dataSet?.forEachIndexed { index, searchTable ->
-                        println("*** valsearch  "+searchTable.title)
-                        if(searchTable.title?.contains(queryText,true)==true){
-                            cursor.addRow(arrayOf(index,searchTable.title))
+                viewModel.apply {
+                    getAllSearch(this@BookMarkActivity)
+                    searchDataSet.observe(this@BookMarkActivity, { dataSet ->
+                        println("*** size " + dataSet.size)
+                        dataSet?.forEachIndexed { index, searchTable ->
+                            println("*** valsearch  " + searchTable.title)
+                            if (searchTable.title?.contains(queryText, true) == true) {
+                                cursor.addRow(arrayOf(index, searchTable.title))
+                            }
                         }
-                    }
-                })
+                    })
+                }
+
             }
         }
         cursorAdapter?.changeCursor(cursor)
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            /* R.id.search -> Toast.makeText(this, "Search Clicked", Toast.LENGTH_SHORT).show()
-             R.id.refresh -> Toast.makeText(this, "Refresh Clicked", Toast.LENGTH_SHORT).show()
-             R.id.copy -> Toast.makeText(this, "Copy Clicked", Toast.LENGTH_SHORT).show()*/
             android.R.id.home -> {
                 onBackPressed()
                 true
@@ -201,21 +208,21 @@ class BookMarkActivity : AppCompatActivity(),RemoveBookMark {
     }
 
     override fun onDestroy() {
-        binding=null
+        binding = null
         super.onDestroy()
     }
 
     override fun removeBookMark(id: Int?) {
-        viewModel.removeBookMark(this,id)
-        viewModel.deleteRecord.observe(this,{data->
-           // viewModel.errorMessage.value = data
-            if(data=="success"){
-                AppConstants.showToast(this,"Deleted successful")
-                adapter=null
-                loadBookMarks()
-            }
-        })
-
+        viewModel.apply {
+            removeBookMark(this@BookMarkActivity, id)
+            deleteRecord.observe(this@BookMarkActivity, { data ->
+                if (data == "success") {
+                    AppConstants.showToast(this@BookMarkActivity, "Deleted successful")
+                   binding?.recycler?.invalidate()
+                    binding?.recycler?.adapter?.notifyDataSetChanged()
+                }
+            })
+        }
     }
 
 }

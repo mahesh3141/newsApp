@@ -41,7 +41,7 @@ class HomeActivity : AppCompatActivity(), AddBookMark {
     var binding: ActivityHomeBinding? = null
     var adapter: HomeAdapter? = null
     var totalCount = -1
-    val pageLimit: Int = 5
+    val pageLimit: Int = 10
     var isLoading = false
     var cursorAdapter: SimpleCursorAdapter? = null
 
@@ -50,7 +50,7 @@ class HomeActivity : AppCompatActivity(), AddBookMark {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
             val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
-            if (!isLoading && totalCount!=-1) {
+            if (!isLoading) {
                 if (linearLayoutManager != null && (totalCount) > pageLimit
                     && linearLayoutManager.findLastCompletelyVisibleItemPosition() >=
                     (recyclerView.adapter?.itemCount ?: 0) - (pageLimit * 0.5)
@@ -92,8 +92,6 @@ class HomeActivity : AppCompatActivity(), AddBookMark {
         * this code is just for testing
         * */
         //arrayNews = AppConstants.getDataFromAssets() ?: ArrayList()
-
-
         viewModel.getTopHeadLine(query, AppConstants.API_KEY)
 
         viewModel.objNewData.observe(this, { dataSet ->
