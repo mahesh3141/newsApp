@@ -25,9 +25,11 @@ import android.content.Context
 import android.database.Cursor
 import android.database.MatrixCursor
 import android.provider.BaseColumns
+import android.widget.AbsListView
 import android.widget.SearchView
 import android.widget.CursorAdapter
 import android.widget.SimpleCursorAdapter
+import androidx.core.widget.NestedScrollView
 import com.robosoft.news.R
 import com.robosoft.news.common.hideKeyboard
 
@@ -41,7 +43,7 @@ class HomeActivity : AppCompatActivity(), AddBookMark {
     var binding: ActivityHomeBinding? = null
     var adapter: HomeAdapter? = null
     var totalCount = -1
-    val pageLimit: Int = 10
+    val pageLimit: Int = 5
     var isLoading = false
     var cursorAdapter: SimpleCursorAdapter? = null
 
@@ -51,15 +53,18 @@ class HomeActivity : AppCompatActivity(), AddBookMark {
             super.onScrolled(recyclerView, dx, dy)
             val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
             if (!isLoading) {
-                if (linearLayoutManager != null && (totalCount) > pageLimit
+                if (linearLayoutManager != null && (totalCount) >= pageLimit
                     && linearLayoutManager.findLastCompletelyVisibleItemPosition() >=
                     (recyclerView.adapter?.itemCount ?: 0) - (pageLimit * 0.5)
                 ) {
+                    isLoading = false
                     loadPage((recyclerView.adapter?.itemCount ?: 0))
                 }
             }
         }
     }
+
+
     lateinit var arrayNews: ArrayList<Article>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,11 +102,15 @@ class HomeActivity : AppCompatActivity(), AddBookMark {
         viewModel.objNewData.observe(this, { dataSet ->
             arrayNews = ArrayList()
             arrayNews = dataSet?.articles as ArrayList<Article>
+            if (totalCount == -1) {
+                totalCount = arrayNews.size
+            }
             loadPage(0)
             /*Lazy Loading*/
             initScrollListener()
             loadFirstRecord(arrayNews)
         })
+
 
     }
 
@@ -145,9 +154,6 @@ class HomeActivity : AppCompatActivity(), AddBookMark {
 
 
     private fun loadMore(arrayNews: MutableList<Article>) {
-        if (totalCount == -1) {
-            totalCount = arrayNews.size
-        }
         if (adapter == null) {
             createRecycler(ArrayList(arrayNews))
         } else {
@@ -185,7 +191,7 @@ class HomeActivity : AppCompatActivity(), AddBookMark {
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(value: String?): Boolean {
                 viewModel.apply {
-                    totalCount=-1
+                    totalCount = -1
                     adapter = null
                     binding?.recycler?.adapter = null
                     binding?.recycler?.removeOnScrollListener(scrollListener)

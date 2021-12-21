@@ -43,7 +43,7 @@ class BookMarkActivity : AppCompatActivity(), RemoveBookMark {
             super.onScrolled(recyclerView, dx, dy)
             val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
             if (!isLoading) {
-                if (linearLayoutManager != null && (totalCount) > pageLimit
+                if (linearLayoutManager != null && (totalCount) >= pageLimit
                     && linearLayoutManager.findLastCompletelyVisibleItemPosition() >=
                     (recyclerView.adapter?.itemCount ?: 0) - (pageLimit * 0.5)
                 ) {
@@ -83,6 +83,9 @@ class BookMarkActivity : AppCompatActivity(), RemoveBookMark {
                 println("***==> " + data?.size)
                 bookmarkList = data as ArrayList<NewsTable>?
                 // displayBookmark()
+                if (totalCount == -1) {
+                    totalCount = bookmarkList?.size ?: 0
+                }
                 loadPage(0)
                 initScrollListener()
             })
@@ -109,9 +112,7 @@ class BookMarkActivity : AppCompatActivity(), RemoveBookMark {
 
     var totalCount = -1
     private fun loadMore(arrayList: MutableList<NewsTable>?) {
-        if (totalCount == -1) {
-            totalCount = arrayList?.size ?: 0
-        }
+
         if (adapter == null) {
             displayBookmark(ArrayList(arrayList))
         } else {
